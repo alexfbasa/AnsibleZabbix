@@ -2,6 +2,11 @@ pipeline {
     agent any
 
     stages {
+        stage('Print Workspace Path') {
+            steps {
+                echo "Jenkins Workspace Path: ${WORKSPACE}"
+            }
+        }
         stage('Checkout Ansible code') {
             steps {
                 script {
