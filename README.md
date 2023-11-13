@@ -33,7 +33,7 @@ Before using AnsibleZabbix, make sure you have the following prerequisites insta
 Clone the AnsibleZabbix repository to your local machine:
 
 ```bash
-git clone https://github.com/your-username/AnsibleZabbix.git
+git clone https://github.com/alexfbasa/AnsibleZabbix.git
 cd AnsibleZabbix
 ```
 

@@ -19,4 +19,5 @@ In this lab, we are using the following environment configuration:
 
 ### Steps
 
-1. ****
+1. **Control Machine**
+Log in the AnsibleServer and install Ansible package.
