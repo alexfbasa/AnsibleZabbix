@@ -4,6 +4,13 @@
   become: yes
 
   tasks:
+    - name: Print current user
+      command: whoami
+      register: current_user
+
+    - debug:
+        var: current_user.stdout
+
     - name: Install Zabbix Agent
       ansible.builtin.yum:
         name: zabbix-agent
