@@ -44,7 +44,7 @@ Inventory file provides information about the targets.
 
 If you are not writing a inventory file, Ansible will use /etc/ansible/hosts as default inventory. You can also specify
 other inventories file specifying the path.
-An example can be followed in [inventory.yaml](hosts/inventory.yaml) 
+An example can be followed in [inventory.yaml](inventories/inventory.yaml) 
 My lab:
 ```yaml
 all:
@@ -57,6 +57,19 @@ all:
 
 Define the user, password and private key parameter;
 Obs: private key permission must be 600 - in AWS host 400
+Obs: Disable ssh connection message:
+** Create/Change in the Ansible control host a file called ansible.cfg **
+- Go to /etc/ansible/ --> make a back of ansible.cfg to ansible.cfg_bkp
+- Run the command: 
+- 
+```commandline
+ansible-config init --disable -t all > ansible.cfg
+```
+It will create a new ansible.cfg file
+- Open the ansible.cfg file --> search for "host_key_checking" uncomment and change it to False.
+```text
+host_key_checking=False
+```
 In my case I am using a vm CentOS 8 running a Jenkins docker.
 Inside the Jenkins docker I can run Ansible and Python command which were built in the Jenkins image.
 In order to make my environment I need to log in inside the CentOS 8 VM, change to user root and then change to user
@@ -79,3 +92,6 @@ Test:
 ```commandline
 ansible host -m ping -i invetory.yaml
 ```
+If you get a fingerprint question, check the observation of ansible.cfg file above.
+If you get UNREACHABLE permission error, change the private key permission to 400 (AWS host) 600 (VM host)
+

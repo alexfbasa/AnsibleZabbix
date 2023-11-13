@@ -1,0 +1,42 @@
+pipeline {
+    agent any
+
+    parameters {
+        choice(name: 'num_hosts', choices: ['1', '2', '3'], description: 'How many hosts to install Zabbix Agent')
+    }
+
+    stages {
+        stage('Input Host Details') {
+            steps {
+                script {
+                    def hosts = []
+                    for (int i = 1; i <= params.num_hosts.toInteger(); i++) {
+                        def name = input(message: "Enter name for Host ${i}:", parameters: [string(defaultValue: "host${i}", description: "Host name")])
+                        def ip = input(message: "Enter IP for Host ${i}:", parameters: [string(defaultValue: "192.168.1.${i}", description: "IP address")])
+                        def username = input(message: "Enter username for Host ${i}:", parameters: [string(defaultValue: "user${i}", description: "Username")])
+
+                        hosts.add([name: name, ip: ip, username: username])
+                    }
+
+                    writeFile file: 'hosts.yaml', text: hosts.collect { "- name: ${it.name}\n  ip: ${it.ip}\n  username: ${it.username}" }.join('\n')
+                }
+            }
+        }
+
+        stage('Install and configure Zabbix Agent') {
+            steps {
+                script {
+                    ansiblePlaybook(
+                        playbook: 'playbooks/install_zabbix_agent.yml',
+                        inventory: 'hosts.yaml',
+                        extraVars: [
+                            zabbix_server_ip: 'your_zabbix_server_ip',
+                            zabbix_agent_hostname: 'your_zabbix_agent_hostname'
+                        ],
+                        credentialsId: 'your_ssh_key_credentials'
+                    )
+                }
+            }
+        }
+    }
+}
