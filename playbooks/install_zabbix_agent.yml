@@ -9,6 +9,10 @@
         name: zabbix-agent
         state: present
 
+    - name: Debug - Print Zabbix Agent config content
+      debug:
+        var: lookup('template', 'templates/zabbix_agent.conf.j2')
+
     - name: Copy Zabbix Agent configuration file
       template:
         src: templates/zabbix_agent.conf.j2
@@ -23,6 +27,6 @@
 
   handlers:
     - name: restart zabbix-agent
-      service:
+      ansible.builtin.service:
         name: zabbix-agent
         state: restarted
