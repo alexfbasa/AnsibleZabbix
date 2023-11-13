@@ -5,7 +5,7 @@
 
   tasks:
     - name: Install Zabbix Agent
-      yum:
+      ansible.builtin.yum:
         name: zabbix-agent
         state: present
 
@@ -15,6 +15,11 @@
         dest: /etc/zabbix/zabbix_agentd.conf
       notify:
         - restart zabbix-agent
+
+    - name: Start Zabbix Service
+      ansible.builtin.service:
+        name: zabbix-agent
+        enabled: yes
 
   handlers:
     - name: restart zabbix-agent

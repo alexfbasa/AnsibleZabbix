@@ -1,9 +1,21 @@
 all:
   hosts:
-    host:
-      ansible_host: 172.17.8.153
+    postgres.dev:
+      ansible_host: 172.17.8.100
       ansible_user: vagrant
       ansible_private_key_file: ~/.ssh/id_rsa
+#    grafana.dev:
+#      ansible_host: 172.17.8.103
+#      ansible_user: vagrant
+#      ansible_private_key_file: ~/.ssh/id_rsa
+  children:
+    vmclients:
+      hosts:
+        postgres.dev:
+#        grafana.dev:
+    stack_lab:
+      children:
+        vmclients:
 
 
 # Jenkins pipeline user input.
