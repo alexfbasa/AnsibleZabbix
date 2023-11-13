@@ -37,7 +37,9 @@ git clone https://github.com/your-username/AnsibleZabbix.git
 cd AnsibleZabbix
 ```
 
-## Usage## DevSecOps Considerations
+## Usage
+
+## DevSecOps Considerations
 
 ### Security Best Practices
 
@@ -58,7 +60,8 @@ issues. Regularly scan both the AnsibleZabbix codebase and the deployed infrastr
 ### Compliance as Code
 
 Consider implementing compliance checks as code to ensure that your infrastructure adheres to security and compliance 
-standards. Tools like [InSpec](https://www.inspec.io/) can be integrated into your Ansible playbook to define and enforce compliance requirements.
+standards. Tools like [InSpec](https://www.inspec.io/) can be integrated into your Ansible playbook to define and 
+enforce compliance requirements.
 
 Example InSpec integration in your Ansible playbook:
 
