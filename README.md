@@ -39,10 +39,25 @@ cd AnsibleZabbix
 
 ## Usage
 
+### Configuring Firewall Rules
+
+Ensure that the Zabbix server and the hosts have appropriate firewall rules to allow communication between them. The
+following ports are commonly used by Zabbix components:
+
+- **Zabbix Server:**
+    - Zabbix Server: Default port is 10051/TCP (can be configured in the Zabbix server settings).
+    - Web Interface: Default port is 80/TCP or 443/TCP (if using HTTPS).
+
+- **Zabbix Agents on Hosts:**
+    - Default port is 10050/TCP (can be configured in the Zabbix agent settings).
+
+Make sure to adjust your firewall rules accordingly to allow traffic on these ports. Failure to do so may result in
+connectivity issues between the Zabbix server and the monitored hosts.
+
 ### Configuring Hosts
 
-Edit the `hosts.yml` file to include the details of the Linux hosts where you want to install Zabbix agents. Specify the
-host IP addresses, SSH credentials, and any other required information.
+Edit the `hosts.yml` file to include the details of the Linux hosts where you want to install Zabbix agents.
+Specify the host IP addresses, SSH credentials, and any other required information.
 
 Example `hosts.yml`:
 
