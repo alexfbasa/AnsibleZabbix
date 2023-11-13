@@ -5,7 +5,7 @@ pipeline {
         stage('Checkout Ansible code') {
             steps {
                 script {
-                    git branch: 'main', url: 'https://github.com/alexfbasa/AnsibleZabbix.git'
+                    git branch: 'master', url: 'https://github.com/alexfbasa/AnsibleZabbix.git'
                 }
             }
         }
