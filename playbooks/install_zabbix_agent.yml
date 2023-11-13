@@ -16,8 +16,16 @@
     - debug:
         var: pwd_output.stdout_lines
 
+    - name: Check if template file exists
+      stat:
+        path: zabbix_agent.conf.j2
+      register: template_stat
+
+    - debug:
+        var: template_stat
+
     - name: Debug - Print Zabbix Agent config content
-      command: cat ../templates/zabbix_agent.conf.j2
+      command: cat zabbix_agent.conf.j2
       register: template_content
 
     - debug:
