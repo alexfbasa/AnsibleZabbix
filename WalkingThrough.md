@@ -20,4 +20,62 @@ In this lab, we are using the following environment configuration:
 ### Steps
 
 1. **Control Machine**
-Log in the AnsibleServer and install Ansible package.
+Install python 
+Install [Ansible](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html#installing-and-upgrading-ansible) package.
+Install SSH.
+
+### Configuring targets
+Controller machine needs to connect with the targets (host clients).
+When we connect in another host using SSH command, the command syntax is:
+```commandline
+ssh -i key_path username@ip_address
+```
+
+We need to provide the same info to Ansible.
+Connect into the controller machine by ssh and create a get into the folder hosts_{}.
+
+Create the inventory file:
+Inventory file provides information about the targets.
+- User name;
+- Password;
+- Login keys;
+- Port number;
+- Whatever you need to log in the target machine
+
+If you are not writing a inventory file, Ansible will use /etc/ansible/hosts as default inventory. You can also specify
+other inventories file specifying the path.
+An example can be followed in [inventory.yaml](hosts/inventory.yaml) 
+My lab:
+```yaml
+all:
+  hosts:
+    host:
+      ansible_host: 172.17.8.103  # VM host provide by Vagrant
+      ansible_user: vagrant       # Default user
+      ansible_private_key_file: ~/.ssh/id_rsa
+```
+
+Define the user, password and private key parameter;
+Obs: private key permission must be 600 - in AWS host 400
+In my case I am using a vm CentOS 8 running a Jenkins docker.
+Inside the Jenkins docker I can run Ansible and Python command which were built in the Jenkins image.
+In order to make my environment I need to log in inside the CentOS 8 VM, change to user root and then change to user
+jenkins:
+```text
+vagrant ssh vm-centos
+sudo -i
+su - jenkins
+docker exec -u jenkins -it container_name bash
+```
+This way I can access the jenkins ssh private key. 
+```text
+ssh-keygen -t rsa -b 4096 -f ~/.ssh/id_rsa -N ""
+chmod 700 ~/.ssh
+ssh-copy-id vagrant@your_target_host
+ssh vagrant@your_target_host
+```
+
+Test:
+```commandline
+ansible host -m ping -i invetory.yaml
+```

@@ -1,0 +1,14 @@
+all:
+  hosts:
+    host:
+      ansible_host: 172.17.8.153
+      ansible_user: vagrant
+      ansible_private_key_file: ~/.ssh/id_rsa
+
+
+## Jenkins pipeline user input.
+#all:
+#  hosts:
+#    host:
+#      ansible_host: "{{ user_input_jenkins }}"
+#      ansible_user: "{{ user_input_jenkins }}"
