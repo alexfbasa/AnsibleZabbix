@@ -21,10 +21,10 @@ pipeline {
                     ansiblePlaybook(
                         playbook: 'playbooks/install_zabbix_agent.yml',
                         inventory: 'inventories/inventory.yaml',
-#                        extraVars: [
-#                            zabbix_server_ip: 'grafana-zabbix.dev',
-#                            zabbix_agent_hostname: 'postgres.dev'
-#                        ],
+                        extraVars: [
+                            zabbix_server_ip: 'grafana-zabbix.dev',
+                            zabbix_agent_hostname: 'postgres.dev'
+                        ],
                         credentialsId: 'ansible_key'
                     )
                 }
