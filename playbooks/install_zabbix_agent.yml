@@ -1,5 +1,5 @@
 ---
-- name: Install Zabbix Agent
+- name: Install Zabbix Agent and Configure Monitored Host
   hosts: all
   become: yes
 
@@ -13,3 +13,24 @@
       ansible.builtin.service:
         name: zabbix-agent
         enabled: yes
+
+    - name: Register Host in Zabbix
+      zabbix_host:
+        server_url: "http://172.17.8.103:8080/api_jsonrpc.php"
+        login_user: "Admin"
+        login_password: "zabbix"
+        host_name: "{{ inventory_hostname }}"
+        visible_name: "{{ inventory_hostname }}"
+        groups:
+          - name: "Linux Servers"
+        templates:
+          - name: "Template OS Linux"
+        state: present
+
+    - name: Enable Zabbix Agent in Host Configuration
+      ini_file:
+        path: "/etc/zabbix/zabbix_agentd.conf"
+        section: "Host Configuration"
+        option: "HostnameItem"
+        value: "{{ inventory_hostname }}"
+        backup: yes
