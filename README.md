@@ -46,21 +46,21 @@ cd AnsibleZabbix
 When implementing AnsibleZabbix in a DevOps environment, consider the following security best practices:
 
 1. **Secure Communication:**
-Ensure that all communication channels, including those between the Zabbix server and hosts, are secured. 
-If possible, use encryption for communication (e.g., SSH for Ansible).
+   Ensure that all communication channels, including those between the Zabbix server and hosts, are secured.
+   If possible, use encryption for communication (e.g., SSH for Ansible).
 
 2. **Secrets Management:**
-Properly manage and secure sensitive information, such as SSH credentials and any other secrets used in your 
-Ansible playbook. Avoid hardcoding sensitive data directly in the code.
+   Properly manage and secure sensitive information, such as SSH credentials and any other secrets used in your
+   Ansible playbook. Avoid hardcoding sensitive data directly in the code.
 
 3. **Continuous Security Scanning:**
-Integrate security scanning tools into your CI/CD pipeline to automatically identify vulnerabilities and security 
-issues. Regularly scan both the AnsibleZabbix codebase and the deployed infrastructure.
+   Integrate security scanning tools into your CI/CD pipeline to automatically identify vulnerabilities and security
+   issues. Regularly scan both the AnsibleZabbix codebase and the deployed infrastructure.
 
 ### Compliance as Code
 
-Consider implementing compliance checks as code to ensure that your infrastructure adheres to security and compliance 
-standards. Tools like [InSpec](https://www.inspec.io/) can be integrated into your Ansible playbook to define and 
+Consider implementing compliance checks as code to ensure that your infrastructure adheres to security and compliance
+standards. Tools like [InSpec](https://www.inspec.io/) can be integrated into your Ansible playbook to define and
 enforce compliance requirements.
 
 Example InSpec integration in your Ansible playbook:
@@ -112,6 +112,22 @@ zabbix_hosts:
 ```
 
 ### Running the Ansible Playbook
+
+Requirements:
+This module is part of the community.zabbix collection (version 2.1.0).
+
+You might already have this collection installed if you are using the ansible package. It is not included in
+ansible-core. To check whether it is installed, run ansible-galaxy collection list.
+
+To install it, use: 
+ansible-galaxy collection install community.zabbix
+
+You need further requirements to be able to use this module, see Requirements for details.
+
+To use it in a playbook, specify:
+community.zabbix.zabbix_host
+
+ansible-galaxy install limepepper.zabbix-agent
 
 Execute the Ansible playbook to install Zabbix agents and configure the hosts:
 
