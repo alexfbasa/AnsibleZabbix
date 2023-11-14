@@ -7,13 +7,6 @@ pipeline {
                 echo "Jenkins Workspace Path: ${WORKSPACE}"
             }
         }
-        stage('Install PyZabbix') {
-            steps {
-                script {
-                    sh 'pip install pyzabbix'
-                }
-            }
-        }
         stage('Checkout Ansible code') {
             steps {
                 script {
@@ -30,13 +23,6 @@ pipeline {
                         inventory: 'inventories/inventory.yaml',
                         credentialsId: 'ansible_key'
                     )
-                }
-            }
-        }
-        stage('Provision Zabbix Host') {
-            steps {
-                script {
-                    sh 'scripts/python provision_zabbix_host.py'
                 }
             }
         }
