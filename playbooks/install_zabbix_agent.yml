@@ -1,28 +1,25 @@
 ---
-- name: Install Zabbix Agent and Configure Monitored Host
-  hosts: all
-  become: yes
+- name: Install Zabbix Agent and Register Host
+  hosts: zabbix_hosts
+  become: true
 
   tasks:
     - name: Install Zabbix Agent
-      ansible.builtin.yum:
-        name: zabbix-agent
-        state: present
+      import_role:
+        name: limepepper.zabbix-agent
 
-    - name: Start Zabbix Service
-      ansible.builtin.service:
+    - name: Start Zabbix Agent
+      service:
         name: zabbix-agent
+        state: started
         enabled: yes
 
-    - name: Register Host in Zabbix
+    - name: Create a new host for this agent
       community.zabbix.zabbix_host:
-        server_url: "http://172.17.8.103:8080/zabbix"
-        login_user: "admin"
-        login_password: "admin_password"
+        login_user: Admin
+        login_password: "zabbix"
+        server_url: http://172.17.8.103:8080/
         host_name: "{{ inventory_hostname }}"
-        visible_name: "{{ inventory_hostname }}"
-        groups:
-          - name: "Linux Servers"
-        templates:
-          - name: "Template OS Linux"
-        state: present
+        host_groups: "{{ zabbix_groups }}"
+        link_templates:
+          - Template OS Linux
