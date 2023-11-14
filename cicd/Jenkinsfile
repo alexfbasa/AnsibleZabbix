@@ -1,17 +1,13 @@
 pipeline {
-    agent any
-
+    agent {
+        docker {
+            image 'debian:12'
+        }
+    }
     stages {
         stage('Print Workspace Path') {
             steps {
                 echo "Jenkins Workspace Path: ${WORKSPACE}"
-            }
-        }
-        stage('Install Zabbix Collection') {
-            steps {
-                script {
-                    sh 'ansible-galaxy collection install community.zabbix'
-                }
             }
         }
         stage('Checkout Ansible code') {
@@ -25,11 +21,16 @@ pipeline {
         stage('Run Ansible playbook') {
             steps {
                 script {
-                    ansiblePlaybook(
-                        playbook: 'playbooks/install_zabbix_agent.yml',
-                        inventory: 'inventories/inventory.yaml',
-                        credentialsId: 'ansible_key'
-                    )
+                    sh 'ansible-playbook -i inventories/inventory.yaml playbooks/install_zabbix_agent.yml'
+                }
+            }
+        }
+
+        stage('Run Python script') {
+            steps {
+                script {
+                    sh 'pip3 install pyzabbix'
+                    sh 'docker run -v ${WORKSPACE}:/workspace -w /workspace debian:12 python3 scripts/provision_zabbix_host.py'
                 }
             }
         }

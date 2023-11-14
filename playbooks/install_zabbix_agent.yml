@@ -1,28 +1,32 @@
 ---
-- name: Create a new host or update an existing host's info
-  hosts: localhost
-  gather_facts: false
+- name: Install Zabbix Agent
+  hosts: your_centos_vm
+  become: yes
 
   tasks:
-    - name: Authenticate with Zabbix API
-      zabbix_api:
-        server_url: http://172.17.8.103:8080/
-        login_user: Admin
-        login_password: zabbix
-      register: zabbix_auth
+    - name: Add Zabbix repository
+      yum_repository:
+        name: zabbix
+        description: Zabbix Official Repository
+        baseurl: https://repo.zabbix.com/zabbix/5.0/rhel/8/x86_64/
+        gpgcheck: yes
+        gpgkey: https://repo.zabbix.com/RPM-GPG-KEY-ZABBIX
+        enabled: yes
 
-    - name: Use zabbix_host module to create/update host
-      zabbix_host:
-        zabbix_api_url: http://172.17.8.103:8080/
-        zabbix_api_user: Admin
-        zabbix_api_password: zabbix
-        host_name: postgres.dev
-        visible_name: postgres.dev
-        description: My ExampleHost Description
-        host_groups:
-          - Linux servers
-        link_templates:
-          - Linux by Zabbix agent active
-        status: enabled
+    - name: Install Zabbix agent
+      yum:
+        name: zabbix-agent
         state: present
-      when: zabbix_auth.success
+
+    - name: Copy Zabbix agent configuration
+      template:
+        src: templates/zabbix_agentd.conf.j2
+        dest: /etc/zabbix/zabbix_agentd.conf
+      notify:
+        - restart zabbix-agent
+
+  handlers:
+    - name: restart zabbix-agent
+      systemd:
+        name: zabbix-agent
+        state: restarted

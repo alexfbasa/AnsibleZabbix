@@ -1,34 +1,42 @@
-import sys
-from pyzabbix import ZabbixAPI, ZabbixAPIException
+from pyzabbix import ZabbixAPI
 
-ZABBIX_SERVER = "http://172.17.8.103:8080/"
-ZABBIX_USER = "Admin"
-ZABBIX_PASSWORD = "zabbix"
+zabbix_url = "http://172.17.8.103:8080"
+zabbix_user = "Admin"
+zabbix_password = "zabbix"
 
+new_host_name = "postgres.dev2"
+new_host_ip = "192.168.0.50"
+template_name = "Linux by Zabbix agent"
+group_name = "Linux servers"
 
-zapi = ZabbixAPI(ZABBIX_SERVER)
+zabbix = ZabbixAPI(zabbix_url)
+zabbix.login(zabbix_user, zabbix_password)
 
-zapi.login(ZABBIX_USER, ZABBIX_PASSWORD)
+template = zabbix.template.get(filter={"host": [template_name]}, output=["templateid"])
+template_id = template[0]["templateid"]
 
-new_host_name = "Zabbix Test"
-new_host_ip = "192.168.1.1"
+group = zabbix.hostgroup.get(filter={"name": [group_name]}, output=["groupid"])
+group_id = group[0]["groupid"]
 
-existing_hosts = zapi.host.get(filter={"host": new_host_name}, selectInterfaces=["interfaceid"])
+new_host = zabbix.host.create(
+    host=new_host_name,
+    interfaces=[
+        {
+            "type": 1,
+            "main": 1,
+            "useip": 1,
+            "ip": new_host_ip,
+            "dns": "",
+            "port": "10050",
+        }
+    ],
+    groups=[{"groupid": group_id}],
+    templates=[{"templateid": template_id}],
+)
 
+if "hostids" in new_host:
+    print(f"Host '{new_host_name}' successfully created in group '{group_name}' with template '{template_name}'.")
+else:
+    print(f"Failed to create host: {new_host['error']['data']}")
 
-if existing_hosts:
-    print(f"Host with name {new_host_name} already exists.")
-    sys.exit()
-
-try:
-    new_host = zapi.host.create(
-        host=new_host_name,
-        interfaces=[{"type": 1, "main": 1, "useip": 1, "ip": new_host_ip, "dns": "", "port": "10050"}],
-        groups=[{"groupid": "Linux"}],
-        template={"templateid": "Linux by Zabbix agent active"},
-    )
-except ZabbixAPIException as e:
-    print(e)
-    sys.exit()
-
-print(f"Created new host with ID: {new_host['hostids'][0]}")
+zabbix.user.logout()
