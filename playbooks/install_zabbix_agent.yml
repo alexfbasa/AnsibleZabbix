@@ -12,11 +12,11 @@
     ansible_zabbix_url_path: ""
 
   tasks:
-    - name: Install Zabbix Agent
-      ansible.builtin.yum:
-        name: zabbix-agent
-        state: present
-      when: ansible_facts.pkg_mgr == 'yum'
+#    - name: Install Zabbix Agent
+#      ansible.builtin.yum:
+#        name: zabbix-agent
+#        state: present
+#      when: ansible_facts.pkg_mgr == 'yum'
 
 
     - name: Create a new host in Zabbix
