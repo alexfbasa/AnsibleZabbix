@@ -15,10 +15,10 @@
         enabled: yes
 
     - name: Register Host in Zabbix
-      zabbix_host:
-        server_url: "http://172.17.8.103:8080/api_jsonrpc.php"
-        login_user: "Admin"
-        login_password: "zabbix"
+      community.zabbix.zabbix_host:
+        server_url: "http://172.17.8.103:8080/zabbix"
+        login_user: "admin"
+        login_password: "admin_password"
         host_name: "{{ inventory_hostname }}"
         visible_name: "{{ inventory_hostname }}"
         groups:
@@ -26,11 +26,3 @@
         templates:
           - name: "Template OS Linux"
         state: present
-
-    - name: Enable Zabbix Agent in Host Configuration
-      ini_file:
-        path: "/etc/zabbix/zabbix_agentd.conf"
-        section: "Host Configuration"
-        option: "HostnameItem"
-        value: "{{ inventory_hostname }}"
-        backup: yes
