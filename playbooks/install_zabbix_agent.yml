@@ -1,6 +1,6 @@
 ---
 - name: Install Zabbix Agent
-  hosts: your_centos_vm
+  hosts: postgres.dev
   become: yes
 
   tasks:
