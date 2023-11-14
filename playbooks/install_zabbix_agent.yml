@@ -1,15 +1,20 @@
+---
 - name: Create a new host or update an existing host's info
-  local_action:
-    module: zabbix_host
-    server_url: http://172.17.8.103:8080/
-    login_user: Admin
-    login_password: zabbix
-    host_name: postgres.dev
-    visible_name: postgres.dev
-    description: My ExampleHost Description
-    host_groups:
-      - Linux servers
-    link_templates:
-      - Linux by Zabbix agent active
-    status: enabled
-    state: present
+  hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - name: Use zabbix_host module to create/update host
+      zabbix_host:
+        server_url: http://172.17.8.103:8080/
+        login_user: Admin
+        login_password: zabbix
+        host_name: postgres.dev
+        visible_name: postgres.dev
+        description: My ExampleHost Description
+        host_groups:
+          - Linux servers
+        link_templates:
+          - Linux by Zabbix agent active
+        status: enabled
+        state: present
