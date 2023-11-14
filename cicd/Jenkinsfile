@@ -7,6 +7,13 @@ pipeline {
                 echo "Jenkins Workspace Path: ${WORKSPACE}"
             }
         }
+        stage('Install Zabbix Collection') {
+            steps {
+                script {
+                    sh 'ansible-galaxy collection install community.zabbix'
+                }
+            }
+        }
         stage('Checkout Ansible code') {
             steps {
                 script {
