@@ -4,11 +4,18 @@
   gather_facts: false
 
   tasks:
-    - name: Use zabbix_host module to create/update host
-      zabbix_host:
+    - name: Authenticate with Zabbix API
+      zabbix_api:
         server_url: http://172.17.8.103:8080/
         login_user: Admin
         login_password: zabbix
+      register: zabbix_auth
+
+    - name: Use zabbix_host module to create/update host
+      zabbix_host:
+        zabbix_api_url: http://172.17.8.103:8080/
+        zabbix_api_user: Admin
+        zabbix_api_password: zabbix
         host_name: postgres.dev
         visible_name: postgres.dev
         description: My ExampleHost Description
@@ -18,3 +25,4 @@
           - Linux by Zabbix agent active
         status: enabled
         state: present
+      when: zabbix_auth.success
