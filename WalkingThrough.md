@@ -84,7 +84,7 @@ This way I can access the jenkins ssh private key.
 ```text
 ssh-keygen -t rsa -b 4096 -f ~/.ssh/id_rsa -N ""
 chmod 700 ~/.ssh
-ssh-copy-id vagrant@your_target_host
+ssh-copy-id vagrant@your_target_host 
 ssh vagrant@your_target_host
 ```
 
